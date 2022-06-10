@@ -7,6 +7,8 @@ def get_price(symbol):
     price = client.get_avg_price(symbol=symbol)['price']
     return float(price)
 
+
+
 client=Client(api_key=api_keys, api_secret=api_secret,testnet=False)
 
 app = Flask(__name__)
@@ -30,22 +32,31 @@ def webhook():
     coin=20*usdt/price
 
     
-    
+    '''
     if data['value']=="int":
         quantity=int(coin)
     if data['value']=="float":
         quantity=float(coin)
-    
+    '''
     
     
 
 
     if data['signal']=="CloseShortOpenLong":
+            
+        if data['value']=="int":
+            quantity=int(coin)
+        if data['value']=="float":
+            quantity=float(coin)
         stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
         print("long")
         print(quantity)
     if data['signal']=="CloseLongOpenShort":
+        if data['value']=="int":
+            quantity=int(coin)
+        if data['value']=="float":
+            quantity=float(coin)
         stopLong=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         print("short")
@@ -61,10 +72,18 @@ def webhook():
         print(quantity)
 
     if data['signal']=="OpenLong":
+        if data['value']=="int":
+            quantity=int(coin)
+        if data['value']=="float":
+            quantity=float(coin)
         buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
         print("long")
         print(quantity)
     if data['signal']=="OpenShort":
+        if data['value']=="int":
+            quantity=int(coin)
+        if data['value']=="float":
+            quantity=float(coin)
         buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         print("short")
         print(quantity)
