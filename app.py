@@ -11,6 +11,7 @@ client=Client(api_key=api_keys, api_secret=api_secret,testnet=False)
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
@@ -20,22 +21,55 @@ def hello_worldtest():
 
 @app.route("/webhook",methods=['POST'])
 def webhook():
-    symbol='TRXUSDT'
     data=json.loads(request.data)
-    price=get_price('TRXUSDT')
+    
+    
+    symbol=data['symbol']
+    price=get_price(symbol)
     usdt=int(data['usdt'])
     coin=20*usdt/price
-    quantity=int(coin)
-    if data['signal']=="long":
+
+    
+    
+    if data['value']=="int":
+        quantity=int(coin)
+    if data['value']=="float":
+        quantity=coin
+    
+    
+    
+
+
+    if data['signal']=="CloseShortOpenLong":
         stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
         print("long")
         print(quantity)
-    if data['signal']=="short":
+    if data['signal']=="CloseLongOpenShort":
         stopLong=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         print("short")
         print(quantity)
+
+    if data['signal']=="CloseShort":
+        stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
+        print("long")
+        print(quantity)
+    if data['signal']=="CloseLong":
+        stopLong=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET' ,quantity=123456, reduceOnly='true')
+        print("short")
+        print(quantity)
+
+    if data['signal']=="OpenLong":
+        buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
+        print("long")
+        print(quantity)
+    if data['signal']=="OpenShort":
+        buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
+        print("short")
+        print(quantity)
+
+
     return{"signal":"success"}
 
 
@@ -54,5 +88,5 @@ def webhook():
 # set FLASK_ENV=development
 #flask run
 
-#     https://trxbogdan.herokuapp.com/
+#     https://trxbogdan.herokuapp.com/webhook
 #     {"usdt":"5","signal":"short"}
