@@ -34,7 +34,7 @@ def webhook():
     if data['value']=="int":
         quantity=int(coin)
     if data['value']=="float":
-        quantity=coin
+        quantity=float(coin)
     
     
     
