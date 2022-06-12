@@ -59,7 +59,7 @@ def webhook():
     
     symbol=data['symbol']
     price=get_price(symbol)
-    usdt=data['usdt']
+    usdt=float(data['usdt'])
     coin=20*usdt/price
     quantity = float(round(coin,8))
     #print(quantity)
@@ -125,3 +125,8 @@ def webhook():
 
 #     https://trxbogdan.herokuapp.com/webhook
 #     {"usdt":"5","signal":"short"}
+#$env:FLASK_APP = "app"
+ #$env:FLASK_ENV = "development"
+ #flask run
+ #http://localhost:5000/webhook
+ #https://trxbogdan.herokuapp.com/webhook
