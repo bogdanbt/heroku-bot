@@ -38,7 +38,11 @@ def value_after_dot(a):
         final=len(d)-2
         return final
 
-
+def get_open_position(dataposition,symbol):    
+    for s in range(len(dataposition)):
+        if dataposition[s]['symbol'] == symbol:
+            filters = float(dataposition[s]['initialMargin'])
+    return filters  
 
 client=Client(api_key=api_keys, api_secret=api_secret,testnet=False)
 
@@ -69,7 +73,11 @@ def webhook():
     #print(quantity)
     
     
+   
+    dataposition=client.futures_account()['positions']
 
+  
+        
     
     
 
@@ -96,11 +104,15 @@ def webhook():
         print(quantity)
 
     if data['signal']=="OpenLong":
-        buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
+        a=get_open_position(dataposition,symbol)
+        if a==0:
+            buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
         print("long")
         print(quantity)
     if data['signal']=="OpenShort":
-        buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
+        a=get_open_position(dataposition,symbol)
+        if a==0:
+            buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         print("short")
         print(quantity)
 
@@ -110,7 +122,16 @@ def webhook():
 
 
 
+'''
 
+try:        
+    stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
+    print("nice")
+except:
+    print("bad")
+buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
+print("nice")
+       '''
 
     
     
