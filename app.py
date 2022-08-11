@@ -1,3 +1,4 @@
+from http import server
 import json
 from flask import Flask, request
 from binance.client import Client
@@ -106,7 +107,10 @@ def webhook():
     if data['signal']=="OpenLong":
         a=get_open_position(dataposition,symbol)
         if a==0:
+            price20=1.2*(get_price(symbol))
+            quantity20=int(quantity*0.2)
             buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
+            takeprofit=client.futures_create_order(symbol=symbol,side='SELL',type='LIMIT',price=price20 ,quantity=100000)
         print("long")
         print(quantity)
     if data['signal']=="OpenShort":
@@ -120,7 +124,8 @@ def webhook():
     return{"signal":"success"}
 
 
-
+if __name__ == 'main':
+    server.run(host='0.0.0.0',port=5000)
 
 '''
 
