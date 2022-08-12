@@ -59,52 +59,119 @@ def hello_worldtest():
 
 @app.route("/webhook",methods=['POST'])
 def webhook():
-    data=json.loads(request.data)
+
+    if data['signal']=="CloseShortOpenLong":
+        data=json.loads(request.data)
     
     
-    symbol=data['symbol']
-    price=get_price(symbol)
-    usdt=float(data['usdt'])
-    coin=20*usdt/price
-    quantity = float(round(coin,8))
-    #print(quantity)
-    a=get_info_minsizecoin(symbol)
-    b=value_after_dot(a)
-    quantity=float(round(quantity,b))
-    #print(quantity)
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
     
     
    
-    dataposition=client.futures_account()['positions']
+        dataposition=client.futures_account()['positions']
 
-  
-        
-    
-    
-
-
-    if data['signal']=="CloseShortOpenLong":
-        
+          
         stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
         print("long")
         print(quantity)
     if data['signal']=="CloseLongOpenShort":
+
+        data=json.loads(request.data)
+    
+    
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
+    
+    
+   
+        dataposition=client.futures_account()['positions']
         stopLong=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET' ,quantity=123456, reduceOnly='true')
         buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         print("short")
         print(quantity)
 
     if data['signal']=="CloseShort":
+
+        data=json.loads(request.data)
+    
+    
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
+    
+    
+   
+        dataposition=client.futures_account()['positions']
         stopShort=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET' ,quantity=123456, reduceOnly='true')
         print("long")
         print(quantity)
     if data['signal']=="CloseLong":
+
+        data=json.loads(request.data)
+    
+    
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
+    
+    
+   
+        dataposition=client.futures_account()['positions']
         stopLong=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET' ,quantity=123456, reduceOnly='true')
         print("short")
         print(quantity)
 
     if data['signal']=="OpenLong":
+
+        data=json.loads(request.data)
+    
+    
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
+    
+    
+   
+        dataposition=client.futures_account()['positions']
         a=get_open_position(dataposition,symbol)
         if a==0:
             price20=1.2*(get_price(symbol))
@@ -114,6 +181,24 @@ def webhook():
         print("long")
         print(quantity)
     if data['signal']=="OpenShort":
+
+        data=json.loads(request.data)
+    
+    
+        symbol=data['symbol']
+        price=get_price(symbol)
+        usdt=float(data['usdt'])
+        coin=20*usdt/price
+        quantity = float(round(coin,8))
+        #print(quantity)
+        a=get_info_minsizecoin(symbol)
+        b=value_after_dot(a)
+        quantity=float(round(quantity,b))
+        #print(quantity)
+    
+    
+   
+        dataposition=client.futures_account()['positions']
         a=get_open_position(dataposition,symbol)
         if a==0:
             buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
