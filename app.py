@@ -109,7 +109,7 @@ def webhook():
     b=value_after_dot(a)
     quantity=float(round(quantity,b))
     #print(quantity)
-    maxcoin=get_positionAmt(dataposition,symbol)
+    maxcoin=abs(get_positionAmt(dataposition,symbol))
     
     
    
