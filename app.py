@@ -1,5 +1,7 @@
 #from http import server
 import json
+from statistics import mean
+import requests
 from flask import Flask, request, jsonify
 from binance.client import Client
 from binance.enums import *
@@ -147,18 +149,39 @@ def webhook():
     if data['signal']=="OpenLong":
         a=get_open_position(dataposition,symbol)
         if a==0:
-            price20=1.2*(get_price(symbol))
-            quantity20=int(quantity*0.2)
-            buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
+            url='https://www.binance.com/futures/data/takerlongshortRatio?symbol='+symbol+'&period=5m&limit=10'
+            a2=[]
+#url='https://www.binance.com/futures/data/takerlongshortRatio?symbol=EOSUSDT&period=5m&limit=10'
+            data2=requests.get(url).json()
+            for s in range(10):
+                a2.append(round(float(data2[s]['buyVol']),0))
+                b3=round(float(data2[s]['buyVol']),0)
+            a3 = mean(a2)
+            c=b3/a3
+
+            if c>1.5:
+                price20=1.2*(get_price(symbol))
+                quantity20=int(quantity*0.2)
+                buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
             #takeprofit=client.futures_create_order(symbol=symbol,side='SELL',type='LIMIT', timeInForce='GTC',price=price20 ,quantity=100000)
-        print("long")
-        print(quantity)
+        #print("long")
+        #print(quantity)
     if data['signal']=="OpenShort":
         a=get_open_position(dataposition,symbol)
         if a==0:
-            buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
-        print("short")
-        print(quantity)
+            url2='https://www.binance.com/futures/data/takerlongshortRatio?symbol='+symbol+'&period=5m&limit=10'
+            
+#url='https://www.binance.com/futures/data/takerlongshortRatio?symbol=EOSUSDT&period=5m&limit=10'
+            data2=requests.get(url2).json()
+            for s in range(10):
+                a2.append(round(float(data2[s]['sellVol']),0))
+                b3=round(float(data2[s]['sellVol']),0)
+            a3 = mean(a2)
+            c=b3/a3
+            if c>1.5:
+                buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
+        #print("short")
+        #print(quantity)
 
 
     return{"signal":"success"}
