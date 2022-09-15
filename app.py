@@ -5,6 +5,12 @@ import requests
 from flask import Flask, request, jsonify
 from binance.client import Client
 from binance.enums import *
+import telegram
+chat_id='425745139'
+api_key='5545278299:AAHIqGnUM6mrgB0fe8DWsUMZrrpDU1BQ8jI'
+bot = telegram.Bot(token=api_key)
+
+
 api_keys='MJXjYzcIxaPjYELP5L6DLieRDhtcPkQndqqIy0aILO6b1pCIWcavtTf82RbAoNxx'
 api_secret='aDBRznWCHBQCzbALB3B1biPuyfuR9PDO2v9W03pJ8E2psO4fLDkvcBlWxIdB2NZq'
 
@@ -160,6 +166,8 @@ def webhook():
             c=b3/a3
 
             if c>1.5:
+                mess=symbol
+                bot.sendMessage(chat_id=chat_id, text=mess)
                 price20=1.2*(get_price(symbol))
                 quantity20=int(quantity*0.2)
                 buyorder=client.futures_create_order(symbol=symbol,side='BUY',type='MARKET',quantity=quantity)
@@ -170,7 +178,7 @@ def webhook():
         a=get_open_position(dataposition,symbol)
         if a==0:
             url2='https://www.binance.com/futures/data/takerlongshortRatio?symbol='+symbol+'&period=5m&limit=10'
-            
+            a2=[]
 #url='https://www.binance.com/futures/data/takerlongshortRatio?symbol=EOSUSDT&period=5m&limit=10'
             data2=requests.get(url2).json()
             for s in range(10):
@@ -179,6 +187,8 @@ def webhook():
             a3 = mean(a2)
             c=b3/a3
             if c>1.5:
+                mess=symbol
+                bot.sendMessage(chat_id=chat_id, text=mess)
                 buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         #print("short")
         #print(quantity)
