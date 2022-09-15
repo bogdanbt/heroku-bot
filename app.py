@@ -155,15 +155,15 @@ def webhook():
     if data['signal']=="OpenLong":
         a=get_open_position(dataposition,symbol)
         if a==0:
-            url='https://www.binance.com/futures/data/takerlongshortRatio?symbol='+symbol+'&period=5m&limit=10'
-            a2=[]
-#url='https://www.binance.com/futures/data/takerlongshortRatio?symbol=EOSUSDT&period=5m&limit=10'
-            data2=requests.get(url).json()
-            for s in range(10):
-                a2.append(round(float(data2[s]['buyVol']),0))
-                b3=round(float(data2[s]['buyVol']),0)
-            a3 = mean(a2)
-            c=b3/a3
+            #url='https://www.binance.com/futures/data/takerlongshortRatio?symbol='+symbol+'&period=5m&limit=10'
+            #a2=[]
+#url='https:#//www.binance.com/futures/data/takerlongshortRatio?symbol=EOSUSDT&period=5m&limit=10'
+            #data2=requests.get(url).json()
+            #for s in range(10):
+            #    a2.append(round(float(data2[s]['buyVol']),0))
+            #    b3=round(float(data2[s]['buyVol']),0)
+            #a3 = mean(a2)
+            #c=b3/a3
             mess="trylong",symbol
             bot.sendMessage(chat_id=chat_id, text=mess)
             if c>1.5:
