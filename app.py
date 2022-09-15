@@ -164,9 +164,10 @@ def webhook():
                 b3=round(float(data2[s]['buyVol']),0)
             a3 = mean(a2)
             c=b3/a3
-
+            mess="trylong",symbol
+            bot.sendMessage(chat_id=chat_id, text=mess)
             if c>1.5:
-                mess=symbol
+                mess="long",symbol
                 bot.sendMessage(chat_id=chat_id, text=mess)
                 price20=1.2*(get_price(symbol))
                 quantity20=int(quantity*0.2)
@@ -186,8 +187,10 @@ def webhook():
                 b3=round(float(data2[s]['sellVol']),0)
             a3 = mean(a2)
             c=b3/a3
+            mess="tryshort",symbol
+            bot.sendMessage(chat_id=chat_id, text=mess)
             if c>1.5:
-                mess=symbol
+                mess="short",symbol
                 bot.sendMessage(chat_id=chat_id, text=mess)
                 buyorder=client.futures_create_order(symbol=symbol,side='SELL',type='MARKET',quantity=quantity)
         #print("short")
